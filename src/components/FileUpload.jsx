@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Upload, FileSpreadsheet, CheckCircle, AlertCircle, ArrowLeft, Brain } from 'lucide-react'
 import useExcelStore from '@/store/useExcelStore'
+import { validateFileSize, validateFileType, formatFileSize, validateDataDimensions } from '@/lib/fileValidation'
 
 const FileUpload = () => {
    const [isDragOver, setIsDragOver] = useState(false)
@@ -20,15 +21,17 @@ const FileUpload = () => {
    const processFile = useCallback(async (file) => {
       if (!file) return
 
-      // Validate file type
-      const validTypes = [
-         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-         'application/vnd.ms-excel',
-         'text/csv'
-      ]
+      // Validate file size
+      const sizeValidation = validateFileSize(file.size)
+      if (!sizeValidation.isValid) {
+         setError(sizeValidation.error)
+         return
+      }
 
-      if (!validTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|csv)$/i)) {
-         setError('Please upload a valid Excel (.xlsx, .xls) or CSV file')
+      // Validate file type
+      const typeValidation = validateFileType(file)
+      if (!typeValidation.isValid) {
+         setError(typeValidation.error)
          return
       }
 
@@ -66,6 +69,14 @@ const FileUpload = () => {
                   })
                   return obj
                })
+
+               // Validate data dimensions for AI analysis
+               const dimensionValidation = validateDataDimensions(rows.length, headers.length)
+               if (!dimensionValidation.isValid) {
+                  setError(dimensionValidation.error)
+                  setIsLoading(false)
+                  return
+               }
 
                // Store in Zustand
                setData(rows, headers, file.name)
@@ -127,7 +138,14 @@ const FileUpload = () => {
 
       const files = Array.from(e.dataTransfer.files)
       if (files.length > 0) {
-         processFile(files[0])
+         const file = files[0]
+         // Validate file before processing
+         const sizeValidation = validateFileSize(file.size)
+         if (!sizeValidation.isValid) {
+            setError(sizeValidation.error)
+            return
+         }
+         processFile(file)
       }
    }, [processFile])
 
@@ -144,6 +162,13 @@ const FileUpload = () => {
    const handleFileInput = (e) => {
       const file = e.target.files[0]
       if (file) {
+         // Validate file before processing
+         const sizeValidation = validateFileSize(file.size)
+         if (!sizeValidation.isValid) {
+            setError(sizeValidation.error)
+            e.target.value = '' // Clear the input
+            return
+         }
          processFile(file)
       }
    }
@@ -185,12 +210,13 @@ const FileUpload = () => {
                   <div className="flex items-start gap-3">
                      <Brain className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                      <div className="text-sm">
-                        <p className="font-medium text-blue-900 mb-1">AI Analysis Requirements:</p>
+                        <p className="font-medium text-blue-900 mb-1">File & AI Analysis Requirements:</p>
                         <ul className="text-blue-700 space-y-1 text-xs">
-                           <li>• Maximum 1,000 rows and 10 columns</li>
-                           <li>• Clean data with clear column headers</li>
-                           <li>• Structured data (no merged cells or complex formatting)</li>
-                           <li>• Numeric data should be in proper number format</li>
+                           <li>• <strong>File size:</strong> Maximum 1MB per file</li>
+                           <li>• <strong>Data size:</strong> Maximum 1,000 rows and 10 columns</li>
+                           <li>• <strong>Data quality:</strong> Clean data with clear column headers</li>
+                           <li>• <strong>Format:</strong> Structured data (no merged cells or complex formatting)</li>
+                           <li>• <strong>Numbers:</strong> Numeric data should be in proper number format</li>
                         </ul>
                      </div>
                   </div>

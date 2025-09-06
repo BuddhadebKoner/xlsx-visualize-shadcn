@@ -49,12 +49,14 @@ A modern web application for uploading, viewing, and analyzing Excel (XLSX/XLS) 
 - **UI Components**: Shadcn/UI with Radix UI primitives
 - **Styling**: Tailwind CSS
 - **AI Integration**: Google Gemini AI (gemini-1.5-flash model)
+- **Database**: MongoDB with Mongoose ODM
 - **Charts**: Recharts for data visualization
 - **File Processing**: SheetJS (xlsx) for Excel file parsing
 - **State Management**: Zustand for global state
-- **Backend**: Express.js server for file uploads
+- **Backend**: Express.js server with file uploads
 - **Icons**: Lucide React
 - **HTTP Client**: Native Fetch API
+- **File Storage**: Local + MongoDB (hybrid approach)
 
 ## 🚀 Getting Started
 
@@ -62,6 +64,7 @@ A modern web application for uploading, viewing, and analyzing Excel (XLSX/XLS) 
 - Node.js (v16 or higher)
 - npm or yarn
 - Google Gemini API key (free tier available)
+- MongoDB database (Atlas recommended for production)
 
 ### Installation
 
@@ -71,12 +74,20 @@ git clone https://github.com/BuddhadebKoner/xlsx-visualize-shadcn.git
 cd xlsx-visualize-shadcn
 ```
 
-2. Install dependencies:
+2. Install frontend dependencies:
 ```bash
 npm install
 ```
 
-3. Set up environment variables:
+3. Install server dependencies:
+```bash
+cd server
+npm install
+```
+
+4. Set up environment variables:
+
+Frontend (.env):
 ```bash
 # Copy the example environment file
 cp .env.example .env
@@ -86,11 +97,38 @@ VITE_GEMINI_API_KEY=your_gemini_api_key_here
 VITE_SERVER_URL=http://localhost:3001
 ```
 
-4. Start the development server:
+Server (server/.env):
 ```bash
+# Copy the server example environment file
+cd server
+cp .env.example .env
+
+# Edit server/.env and add your MongoDB connection
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/xlsx-visualizer
+PORT=3001
+NODE_ENV=development
+```
+
+5. Start the development servers:
+
+Frontend:
+```bash
+# From project root
+npm run dev
+```
+
+Backend:
+```bash
+# From server directory
+cd server
+npm start
+```
+
+Or start both together:
+```bash
+# From project root
 npm run dev:full
 ```
-This command starts both the frontend (port 5173) and backend server (port 3001) concurrently.
 
 ### Available Scripts
 
