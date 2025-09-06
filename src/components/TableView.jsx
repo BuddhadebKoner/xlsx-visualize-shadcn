@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Search, FileSpreadsheet, BarChart3, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, FileSpreadsheet, BarChart3, ChevronLeft, ChevronRight, Brain } from 'lucide-react'
 import useExcelStore from '@/store/useExcelStore'
 
 const TableView = () => {
@@ -66,13 +66,23 @@ const TableView = () => {
                      <FileSpreadsheet className="h-5 w-5" />
                      <span>Table View</span>
                   </div>
-                  <Button
-                     onClick={() => navigate('/visualize')}
-                     className="flex items-center space-x-2"
-                  >
-                     <BarChart3 className="h-4 w-4" />
-                     <span>Visualize Data</span>
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                     <Button
+                        onClick={() => navigate('/ai-analysis')}
+                        variant="outline"
+                        className="flex items-center space-x-2"
+                     >
+                        <Brain className="h-4 w-4" />
+                        <span>Ask AI</span>
+                     </Button>
+                     <Button
+                        onClick={() => navigate('/visualize')}
+                        className="flex items-center space-x-2"
+                     >
+                        <BarChart3 className="h-4 w-4" />
+                        <span>Visualize Data</span>
+                     </Button>
+                  </div>
                </CardTitle>
                <CardDescription>
                   Viewing data from: <strong>{fileName}</strong> ({data.length} rows, {headers.length} columns)

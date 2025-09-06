@@ -2,7 +2,7 @@ import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { FileSpreadsheet, Table, BarChart3 } from 'lucide-react'
+import { FileSpreadsheet, Table, BarChart3, Home, Upload, Brain } from 'lucide-react'
 
 const Layout = ({ children }) => {
    const location = useLocation()
@@ -26,7 +26,17 @@ const Layout = ({ children }) => {
                            variant={isActive('/') ? 'default' : 'ghost'}
                            className="flex items-center space-x-2"
                         >
-                           <FileSpreadsheet className="h-4 w-4" />
+                           <Home className="h-4 w-4" />
+                           <span>Home</span>
+                        </Button>
+                     </Link>
+
+                     <Link to="/upload">
+                        <Button
+                           variant={isActive('/upload') ? 'default' : 'ghost'}
+                           className="flex items-center space-x-2"
+                        >
+                           <Upload className="h-4 w-4" />
                            <span>Upload</span>
                         </Button>
                      </Link>
@@ -48,6 +58,16 @@ const Layout = ({ children }) => {
                         >
                            <BarChart3 className="h-4 w-4" />
                            <span>Visualize</span>
+                        </Button>
+                     </Link>
+
+                     <Link to="/ai-analysis">
+                        <Button
+                           variant={isActive('/ai-analysis') ? 'default' : 'ghost'}
+                           className="flex items-center space-x-2"
+                        >
+                           <Brain className="h-4 w-4" />
+                           <span>AI Analysis</span>
                         </Button>
                      </Link>
                   </div>

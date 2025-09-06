@@ -7,7 +7,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { FileSpreadsheet, BarChart3, LineChart as LineChartIcon, PieChart as PieChartIcon, Table } from 'lucide-react'
+import { FileSpreadsheet, BarChart3, LineChart as LineChartIcon, PieChart as PieChartIcon, Table, Brain } from 'lucide-react'
 import useExcelStore from '@/store/useExcelStore'
 
 const ChartView = () => {
@@ -153,14 +153,24 @@ const ChartView = () => {
                      <BarChart3 className="h-5 w-5" />
                      <span>Data Visualization</span>
                   </div>
-                  <Button
-                     variant="outline"
-                     onClick={() => navigate('/table')}
-                     className="flex items-center space-x-2"
-                  >
-                     <Table className="h-4 w-4" />
-                     <span>View Table</span>
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                     <Button
+                        variant="outline"
+                        onClick={() => navigate('/ai-analysis')}
+                        className="flex items-center space-x-2"
+                     >
+                        <Brain className="h-4 w-4" />
+                        <span>Ask AI</span>
+                     </Button>
+                     <Button
+                        variant="outline"
+                        onClick={() => navigate('/table')}
+                        className="flex items-center space-x-2"
+                     >
+                        <Table className="h-4 w-4" />
+                        <span>View Table</span>
+                     </Button>
+                  </div>
                </CardTitle>
                <CardDescription>
                   Creating charts from: <strong>{fileName}</strong> ({data.length} rows)
